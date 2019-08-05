@@ -1,6 +1,6 @@
 package com.lin.seckill.pojo.vo;
 
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ public class GoodsDetailVo {
     private int miaoshaStatus = 0;
     private int remainSeconds = 0;
     private GoodsVO goods;
-    private SeckillUser user;
+    private User user;
 }

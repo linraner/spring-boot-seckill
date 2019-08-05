@@ -3,7 +3,7 @@ package com.lin.seckill.web;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.result.Result;
 import com.lin.seckill.model.OrderInformation;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.GoodsVO;
 import com.lin.seckill.pojo.vo.OrderDetailVO;
 import com.lin.seckill.redis.RedisService;
@@ -11,7 +11,6 @@ import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +32,7 @@ public class OrderController {
     private IGoodsService goodsService;
 
     @RequestMapping("/detail")
-    public Result<OrderDetailVO> list(SeckillUser user, @RequestParam("orderId") long orderId) {
+    public Result<OrderDetailVO> list(User user, @RequestParam("orderId") long orderId) {
         if (user == null) {
             return Result.error(CodeMessage.SESSION_ERROR);
         }

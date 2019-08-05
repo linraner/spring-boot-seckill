@@ -1,7 +1,7 @@
 package com.lin.seckill.web;
 
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.GoodsDetailVo;
 import com.lin.seckill.pojo.vo.GoodsVO;
 import com.lin.seckill.redis.GoodsKey;
@@ -36,7 +36,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/to_list", produces = "text/html")
     @ResponseBody
-    public String list(HttpServletRequest request, HttpServletResponse response, Model model, SeckillUser user) {
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         model.addAttribute("user", user);
         List<GoodsVO> goodsList = goodsService.listGoodVO();
         model.addAttribute("goodsList", goodsList);
@@ -51,7 +51,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
     @ResponseBody
-    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model, SeckillUser user, @PathVariable("goodsId") long goodsId) {
+    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model, User user, @PathVariable("goodsId") long goodsId) {
         model.addAttribute("user", user);
 
         //取缓存
@@ -93,7 +93,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(SeckillUser user, @PathVariable("goodsId") long goodsId) {
+    public Result<GoodsDetailVo> detail(User user, @PathVariable("goodsId") long goodsId) {
         GoodsVO goods = goodsService.getGoodsVoByGoodsId(goodsId);
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();

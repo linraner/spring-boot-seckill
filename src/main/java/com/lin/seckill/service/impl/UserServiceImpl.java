@@ -4,11 +4,11 @@ import com.lin.seckill.common.execption.GlobalException;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.util.MD5Util;
 import com.lin.seckill.common.util.UUIDUtil;
-import com.lin.seckill.dao.SeckillUserDAO;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.dao.UserDAO;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.LoginVO;
 import com.lin.seckill.redis.RedisService;
-import com.lin.seckill.redis.SeckillUserKey;
+import com.lin.seckill.redis.UserKey;
 import com.lin.seckill.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,25 +22,22 @@ public class UserServiceImpl implements IUserService {
     public static final String COOKI_NAME_TOKEN = "token";
 
     @Autowired
-    private SeckillUserDAO seckillUserDao;
-
-    @Autowired
     private RedisService redisService;
 
     @Autowired
-    private SeckillUserDAO userDao;
+    private UserDAO userDAO;
 
     @Override
-    public SeckillUser getById(long id) {
+    public User getById(long id) {
         // 从缓冲中读取
-        SeckillUser user = redisService.get(SeckillUserKey.getById, "" + id, SeckillUser.class);
+        User user = redisService.get(UserKey.getById, "" + id, User.class);
         if (user != null) {
             return user;
         }
 
-        user = userDao.getById(id);
+        user = userDAO.getById(id);
         if (user != null) {
-            redisService.set(SeckillUserKey.getById, "" + id, user);
+            redisService.set(UserKey.getById, "" + id, user);
         }
         return user;
     }
@@ -53,7 +50,7 @@ public class UserServiceImpl implements IUserService {
         String mobile = loginVO.getMobile();
         String formPassword = loginVO.getPassword();
 
-        SeckillUser user = getById(Long.parseLong(mobile));
+        User user = getById(Long.parseLong(mobile));
         if (user == null) {
             throw new GlobalException(CodeMessage.MOBILE_NOT_EXIST);
         }
@@ -71,11 +68,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public SeckillUser getByToken(HttpServletResponse response, String token) {
+    public User getByToken(HttpServletResponse response, String token) {
         if (StringUtils.isEmptyOrWhitespace(token)) {
             return null;
         }
-        SeckillUser user = redisService.get(SeckillUserKey.token, token, SeckillUser.class);
+        User user = redisService.get(UserKey.token, token, User.class);
         // 延长有效期
         if (null == user) {
             addCookie(response, token, user);
@@ -84,10 +81,10 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    private void addCookie(HttpServletResponse response, String token, SeckillUser user) {
-        redisService.set(SeckillUserKey.token, token, user);
+    private void addCookie(HttpServletResponse response, String token, User user) {
+        redisService.set(UserKey.token, token, user);
         Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
-        cookie.setMaxAge(SeckillUserKey.token.expireSeconds());
+        cookie.setMaxAge(UserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
     }

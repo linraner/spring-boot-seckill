@@ -3,7 +3,7 @@ package com.lin.seckill.service.impl;
 import com.lin.seckill.dao.OrderDAO;
 import com.lin.seckill.model.OrderInformation;
 import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.GoodsVO;
 import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.redis.RedisService;
@@ -33,7 +33,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderInformation createOderInformation(SeckillUser user, GoodsVO goods) {
+    public OrderInformation createOderInformation(User user, GoodsVO goods) {
         OrderInformation orderInformation = new OrderInformation();
         orderInformation.setCreateDate(new Date());
         orderInformation.setDeliveryAddrId(0L);

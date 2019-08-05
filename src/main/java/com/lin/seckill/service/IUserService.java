@@ -1,7 +1,7 @@
 package com.lin.seckill.service;
 
 
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.LoginVO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ public interface IUserService {
      * @param id
      * @return
      */
-    SeckillUser getById(long id);
+    User getById(long id);
 
 
     /**
@@ -32,6 +32,6 @@ public interface IUserService {
      * @param token
      * @return
      */
-    SeckillUser getByToken(HttpServletResponse response, String token);
+    User getByToken(HttpServletResponse response, String token);
 
 }

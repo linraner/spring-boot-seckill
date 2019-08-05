@@ -1,9 +1,8 @@
 package com.lin.seckill.service;
 
-import com.lin.seckill.model.Goods;
 import com.lin.seckill.model.OrderInformation;
 import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.pojo.vo.GoodsVO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ public interface IOrderService {
      * @return
      */
     @Transactional
-    OrderInformation createOderInformation(SeckillUser  user, GoodsVO goodsVO);
+    OrderInformation createOderInformation(User user, GoodsVO goodsVO);
 
 
     /**

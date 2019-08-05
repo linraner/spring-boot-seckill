@@ -1,15 +1,15 @@
 package com.lin.seckill.common.access;
 
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 
 public class UserContext {
-    private static ThreadLocal<SeckillUser> userHolder = new ThreadLocal<>();
+    private static ThreadLocal<User> userHolder = new ThreadLocal<>();
 
-    public static void setUserHolder(SeckillUser user) {
+    public static void setUserHolder(User user) {
         userHolder.set(user);
     }
 
-    public static SeckillUser getUser() {
+    public static User getUser() {
         return userHolder.get();
     }
 

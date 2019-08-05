@@ -1,6 +1,6 @@
 package com.lin.seckill.common.access;
 
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IUserService;
 import com.lin.seckill.service.impl.UserServiceImpl;
@@ -28,7 +28,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
      * @param response
      * @return
      */
-    private SeckillUser getUser(HttpServletRequest request, HttpServletResponse response) {
+    private User getUser(HttpServletRequest request, HttpServletResponse response) {
         String paramToken = request.getParameter(UserServiceImpl.COOKI_NAME_TOKEN);
         String cookieToken = getCookieValue(request);
         if (StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)) {

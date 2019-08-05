@@ -1,19 +1,17 @@
 package com.lin.seckill.dao;
 
 import com.lin.seckill.model.User;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserDAO {
 
-    @Select("select * from user where id = #{id}")
-    User getById(@Param("id") int id);
+    @Select("select * from miaosha_user where id = #{id}")
+    User getById(@Param("id") long id);
 
-    @Insert("insert into user(id, name)values(#{id}, #{name})")
-    void insert(User user);
-
+    @Update("update miaosha_user set password = #{password} where id = #{id}")
+    void update(User toBeUpdate);
 }

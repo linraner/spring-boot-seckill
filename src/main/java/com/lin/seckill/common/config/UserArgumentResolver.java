@@ -1,7 +1,7 @@
 package com.lin.seckill.common.config;
 
 import com.lin.seckill.common.access.UserContext;
-import com.lin.seckill.model.SeckillUser;
+import com.lin.seckill.model.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -14,7 +14,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         Class<?> clazz = parameter.getParameterType();
-        return clazz == SeckillUser.class;
+        return clazz == User.class;
     }
 
     /**
