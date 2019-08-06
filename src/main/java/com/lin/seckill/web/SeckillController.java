@@ -9,7 +9,9 @@ import com.lin.seckill.pojo.vo.GoodsVO;
 import com.lin.seckill.rabbitmq.MQSender;
 import com.lin.seckill.rabbitmq.SeckillMessage;
 import com.lin.seckill.redis.GoodsKey;
+import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.redis.RedisService;
+import com.lin.seckill.redis.SeckillKey;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.ISeckillService;
@@ -23,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -44,6 +47,32 @@ public class SeckillController {
     @Autowired
     private MQSender sender;
 
+    /**
+     * 初始化接口
+     */
+    public void afterPropertiesSet() {
+        List<GoodsVO> goodsList = goodsService.listGoodsVO();
+        if (goodsList == null) {
+            return;
+        }
+        for (GoodsVO goods : goodsList) {
+            //加载到redis中
+            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
+        }
+    }
+
+    @GetMapping("/reset")
+    public Result<Boolean> reset() {
+        List<GoodsVO> goodsList = goodsService.listGoodsVO();
+        for (GoodsVO goods : goodsList) {
+            goods.setStockCount(10);
+            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), 10);
+        }
+        redisService.delete(OrderKey.getSeckillOrderByUidGid);
+        redisService.delete(SeckillKey.isGoodOver);
+        seckillService.reset(goodsList);
+        return Result.success(true);
+    }
 
     @PostMapping("/{path}/do_miaosha")
     public Result<Integer> seckill(Model model, User user, @RequestParam("goodsId") long goodsId, @PathVariable("path") String path) {
@@ -131,5 +160,6 @@ public class SeckillController {
             return Result.error(CodeMessage.MIAOSHA_FAIL);
         }
     }
+
 
 }

@@ -11,7 +11,7 @@ public interface IGoodsService {
      *
      * @return
      */
-    List<GoodsVO> listGoodVO();
+    List<GoodsVO> listGoodsVO();
 
     /**
      *

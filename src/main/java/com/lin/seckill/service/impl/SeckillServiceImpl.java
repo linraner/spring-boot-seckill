@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -156,6 +157,12 @@ public class SeckillServiceImpl implements ISeckillService {
         redisService.set(SeckillKey.getSeckillVerifyCode, user.getId() + "," + goodsId, calc(verifyCode));
         //输出图片
         return bufferedImage;
+    }
+
+    @Override
+    public void reset(List<GoodsVO> goodsVOList) {
+        goodsService.resetStock(goodsVOList);
+        orderService.deleteOrders();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class GoodsController {
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         log.info("商品列表页 用户信息:{}", user.toString());
         model.addAttribute("user", user);
-        List<GoodsVO> goodsList = goodsService.listGoodVO();
+        List<GoodsVO> goodsList = goodsService.listGoodsVO();
         model.addAttribute("goodsList", goodsList);
         WebContext webContext = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
         //手动渲染

@@ -5,6 +5,7 @@ import com.lin.seckill.pojo.vo.GoodsVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public interface ISeckillService {
 
@@ -76,4 +77,10 @@ public interface ISeckillService {
      * @return
      */
     boolean checkVerifyCode(User user, long goodsId, int verifyCode);
+
+    /**
+     * 初始化
+     * @param goodsVOList
+     */
+    void reset(List<GoodsVO> goodsVOList);
 }

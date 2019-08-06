@@ -17,9 +17,9 @@ public class MQSenderTest {
 
 
 
-//    @Test
-//    public void send() {
-//        mqSender.send("this is a test");
-//
-//    }
+    @Test
+    public void send() {
+        mqSender.send("this is a test");
+
+    }
 }

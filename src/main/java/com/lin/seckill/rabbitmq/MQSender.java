@@ -15,18 +15,18 @@ public class MQSender {
     public void sendSeckillMessage(SeckillMessage mm) {
         String msg = RedisService.beanToString(mm);
         log.info("send message:" + msg);
-        amqpTemplate.convertAndSend(MQConfig.MIAOSHA_QUEUE, msg);
+        amqpTemplate.convertAndSend(MQConfig.SECKILL_QUEUE, msg);
     }
 
-//    /**
-//     * test
-//     * @param message
-//     */
-//    public void send(Object message) {
-//        String msg = RedisService.beanToString(message);
-//        log.info("sender message:{}", msg);
-//        amqpTemplate.convertAndSend(MQConfig.QUEUE, msg);
-//    }
+    /**
+     * test
+     * @param message
+     */
+    public void send(Object message) {
+        String msg = RedisService.beanToString(message);
+        log.info("sender message:{}", msg);
+        amqpTemplate.convertAndSend(MQConfig.QUEUE, msg);
+    }
 
 
 }

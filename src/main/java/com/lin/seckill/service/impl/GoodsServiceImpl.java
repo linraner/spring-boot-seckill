@@ -17,7 +17,7 @@ public class GoodsServiceImpl implements IGoodsService {
     private GoodsDAO goodsDao;
 
     @Override
-    public List<GoodsVO> listGoodVO() {
+    public List<GoodsVO> listGoodsVO() {
         return goodsDao.listGoodsVo();
     }
 
