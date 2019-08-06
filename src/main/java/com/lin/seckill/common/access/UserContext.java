@@ -5,7 +5,7 @@ import com.lin.seckill.model.User;
 public class UserContext {
     private static ThreadLocal<User> userHolder = new ThreadLocal<>();
 
-    public static void setUserHolder(User user) {
+    public static void setUser(User user) {
         userHolder.set(user);
     }
 

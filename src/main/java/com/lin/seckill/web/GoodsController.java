@@ -7,6 +7,7 @@ import com.lin.seckill.pojo.vo.GoodsVO;
 import com.lin.seckill.redis.GoodsKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("goods")
 public class GoodsController {
@@ -37,6 +39,7 @@ public class GoodsController {
     @RequestMapping(value = "/to_list", produces = "text/html")
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
+        log.info("商品列表页 用户信息:{}", user.toString());
         model.addAttribute("user", user);
         List<GoodsVO> goodsList = goodsService.listGoodVO();
         model.addAttribute("goodsList", goodsList);
@@ -62,6 +65,7 @@ public class GoodsController {
         //手动渲染
         GoodsVO goods = goodsService.getGoodsVoByGoodsId(goodsId);
         model.addAttribute("goods", goods);
+        log.info("商品信息: {}", goods.toString());
 
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();

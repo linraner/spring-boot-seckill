@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/order")
@@ -32,6 +33,7 @@ public class OrderController {
     private IGoodsService goodsService;
 
     @RequestMapping("/detail")
+    @ResponseBody
     public Result<OrderDetailVO> list(User user, @RequestParam("orderId") long orderId) {
         if (user == null) {
             return Result.error(CodeMessage.SESSION_ERROR);

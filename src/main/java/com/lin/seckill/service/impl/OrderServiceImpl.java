@@ -33,7 +33,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderInformation createOderInformation(User user, GoodsVO goods) {
+    public OrderInformation createOder(User user, GoodsVO goods) {
         OrderInformation orderInformation = new OrderInformation();
         orderInformation.setCreateDate(new Date());
         orderInformation.setDeliveryAddrId(0L);

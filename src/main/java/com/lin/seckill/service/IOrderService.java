@@ -32,7 +32,7 @@ public interface IOrderService {
      * @return
      */
     @Transactional
-    OrderInformation createOderInformation(User user, GoodsVO goodsVO);
+    OrderInformation createOder(User user, GoodsVO goods);
 
 
     /**

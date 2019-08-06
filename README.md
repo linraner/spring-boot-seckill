@@ -10,3 +10,8 @@
 * AOP实现切面锁
 * Disruptor高效队列
 * 商品详情页静态化
+
+
+## todo
+* SpringBoot Session
+*
