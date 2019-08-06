@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Class-Path: spring-boot-autoconfigure-1.5.21.RELEASE.jar logback-class
+ ic-1.1.11.jar jul-to-slf4j-1.7.26.jar spring-expression-4.3.24.RELEAS
+ E.jar unbescape-1.1.0.RELEASE.jar spring-boot-starter-thymeleaf-1.5.2
+ 1.RELEASE.jar aspectjweaver-1.8.14.jar spring-tx-4.3.24.RELEASE.jar s
+ wagger-annotations-1.5.3.jar mybatis-spring-1.3.1.jar mybatis-spring-
+ boot-autoconfigure-1.3.1.jar tomcat-jdbc-8.5.40.jar spring-amqp-1.7.1
+ 3.RELEASE.jar spring-boot-1.5.21.RELEASE.jar thymeleaf-spring4-2.1.6.
+ RELEASE.jar amqp-client-4.8.3.jar thymeleaf-layout-dialect-1.4.0.jar 
+ tomcat-annotations-api-8.5.40.jar spring-aop-4.3.24.RELEASE.jar sprin
+ g-plugin-metadata-1.2.0.RELEASE.jar springfox-swagger2-2.2.2.jar slf4
+ j-api-1.7.26.jar log4j-over-slf4j-1.7.26.jar jackson-databind-2.8.11.
+ 3.jar jedis-2.9.3.jar spring-webmvc-4.3.24.RELEASE.jar ognl-3.0.8.jar
+  spring-boot-starter-tomcat-1.5.21.RELEASE.jar spring-boot-starter-jd
+ bc-1.5.21.RELEASE.jar spring-boot-starter-1.5.21.RELEASE.jar jackson-
+ annotations-2.8.0.jar spring-core-4.3.24.RELEASE.jar springfox-spring
+ -web-2.2.2.jar guava-18.0.jar springfox-schema-2.2.2.jar tomcat-embed
+ -websocket-8.5.40.jar validation-api-1.1.0.Final.jar mybatis-spring-b
+ oot-starter-1.3.1.jar druid-1.1.9.jar commons-pool2-2.4.3.jar jcl-ove
+ r-slf4j-1.7.26.jar commons-codec-1.12.jar classmate-1.3.4.jar spring-
+ messaging-4.3.24.RELEASE.jar swagger-models-1.5.3.jar javassist-3.21.
+ 0-GA.jar groovy-2.4.17.jar snakeyaml-1.17.jar lombok-1.16.22.jar maps
+ truct-1.0.0.CR1.jar spring-boot-starter-web-1.5.21.RELEASE.jar spring
+ -plugin-core-1.2.0.RELEASE.jar springfox-swagger-ui-2.2.2.jar tomcat-
+ juli-8.5.40.jar fastjson-1.2.56.jar spring-web-4.3.24.RELEASE.jar log
+ back-core-1.1.11.jar spring-context-4.3.24.RELEASE.jar hibernate-vali
+ dator-5.3.6.Final.jar jboss-logging-3.3.2.Final.jar jackson-core-2.8.
+ 11.jar spring-hateoas-0.23.0.RELEASE.jar mysql-connector-java-5.1.47.
+ jar tomcat-embed-core-8.5.40.jar http-client-1.1.1.RELEASE.jar spring
+ -retry-1.2.4.RELEASE.jar tomcat-embed-el-8.5.40.jar httpcore-4.4.11.j
+ ar spring-jdbc-4.3.24.RELEASE.jar spring-rabbit-1.7.13.RELEASE.jar sp
+ ring-boot-starter-logging-1.5.21.RELEASE.jar httpclient-4.5.8.jar spr
+ ing-beans-4.3.24.RELEASE.jar mybatis-3.4.5.jar aspectjrt-1.8.14.jar s
+ pringfox-swagger-common-2.2.2.jar druid-spring-boot-starter-1.1.9.jar
+  thymeleaf-2.1.6.RELEASE.jar springfox-spi-2.2.2.jar spring-boot-star
+ ter-amqp-1.5.21.RELEASE.jar springfox-core-2.2.2.jar
+Main-Class: com.lin.seckill.SeckillApplication
+

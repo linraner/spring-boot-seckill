@@ -103,7 +103,7 @@ public class SeckillController {
         return Result.success(0);
     }
 
-    @PostMapping("/do_miaosha")
+//    @PostMapping("/do_miaosha")
     public String list(Model model, User user, @RequestParam("goodsId") long goodsId) {
         log.info("秒杀界面用户信息: {} 商品ID: {}", user.toString(), goodsId);
         if (null == user) {
@@ -123,7 +123,7 @@ public class SeckillController {
 
         seckillService.seckill(user, goods);
         long result = seckillService.getSeckillResult(user.getId(), goodsId);
-        log.info("秒杀用户:{}秒杀商品:{}结果:{}", user.getId(), goodsId, result);
+//        log.info("秒杀用户:{}秒杀商品:{}结果:{}", user.getId(), goodsId, result);
         return "redirect:/goods_list";
     }
 

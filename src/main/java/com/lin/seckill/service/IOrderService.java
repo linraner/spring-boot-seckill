@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IOrderService {
 
     /**
-     *
+     * 获取订单 userId+goodId
      * @param userId
      * @param goodId
      * @return
@@ -18,7 +18,7 @@ public interface IOrderService {
 
 
     /**
-     *
+     * 根据orderID查询订单
      * @param orderId
      * @return
      */
@@ -26,7 +26,7 @@ public interface IOrderService {
 
 
     /**
-     * 创建订单信息
+     * 创建订单信息 用户信息 和 商品信息
      * @param user
      * @param goods
      * @return
@@ -36,7 +36,7 @@ public interface IOrderService {
 
 
     /**
-     * 内部调用
+     * 内部调用 删除订单接口
      */
     void deleteOrders();
 }

@@ -3,6 +3,7 @@ package com.lin.seckill.web;
 import com.lin.seckill.common.result.Result;
 import com.lin.seckill.pojo.vo.LoginVO;
 import com.lin.seckill.service.IUserService;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @Controller
+@Api(tags = "登录接口")
 public class LoginController {
 
     @Autowired
@@ -26,6 +28,10 @@ public class LoginController {
     }
 
 
+    @ApiOperation(value = "登录", notes = "根据loginVO登录")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "loginVO", value = "用户实体类user", required = true, dataType = "LoginVO")
+    })
     @PostMapping("/do_login")
     @ResponseBody
     public Result<String> doLogin(HttpServletResponse response, @Valid LoginVO loginVO) {
