@@ -25,41 +25,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Controller
 @RequestMapping("/miaosha")
 public class SeckillController implements InitializingBean {
 
+    ConcurrentHashMap<Long, Boolean> seckillOverMap = new ConcurrentHashMap<Long, Boolean>();
     @Autowired
     private RedisService redisService;
-
     @Autowired
     private IGoodsService goodsService;
-
     @Autowired
     private IOrderService orderService;
-
     @Autowired
     private ISeckillService seckillService;
-
     @Autowired
     private MQSender sender;
-
     @Autowired
     private IUserService userService;
-
-    @Override
-    public void afterPropertiesSet() {
-        List<GoodsVO> goodsList = goodsService.listGoodsVO();
-        if (goodsList == null) {
-            return;
-        }
-        for (GoodsVO goods : goodsList) {
-            //加载到redis中
-            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
-        }
-    }
 
     @GetMapping("/reset")
     public Result<Boolean> reset() {
@@ -85,6 +70,7 @@ public class SeckillController implements InitializingBean {
         if (!checkPath) {
             return Result.error(CodeMessage.REQUEST_ILLEGAL);
         }
+
         long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
         if (stock < 0) {
             return Result.error(CodeMessage.MIAO_SHA_OVER);
@@ -109,41 +95,54 @@ public class SeckillController implements InitializingBean {
     @PostMapping("/do_miaosha")
     @ResponseBody
     public String list(Model model, @RequestParam("token") String token, @RequestParam("goodsId") long goodsId,
-                       @RequestParam("userId") long userId, HttpServletResponse response) {
+                       @RequestParam("userId") long userId) {
         User user = redisService.get(UserKey.token, token, User.class);
+
         if (user == null) {
             log.info("用户为空");
             user = userService.getById(userId);
-//            userService.login(response, );
         }
 
         log.info("秒杀接口：正在秒杀--用户ID: {} 商品ID: {}", user.getId(), goodsId);
-        if (null == user) {
-//            log.info("y");
-            return "login";
+        // 用户检查
+        if (user == null) {
+            return "user is null";
         }
-        model.addAttribute("user", user);
-        GoodsVO goods = goodsService.getGoodsVoByGoodsId(goodsId);
-        int stock = goods.getGoodsStock();
-        if (stock <= 0) {
-            model.addAttribute("errmsg", CodeMessage.MIAO_SHA_OVER.getMsg());
-            return "seckill fail";
+
+        // 提前标记
+        boolean over = seckillOverMap.getOrDefault(goodsId, true);
+        if (over) {
+            return "is over";
         }
+
+        // 库存检查
+        long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+        if (stock < 0) {
+            seckillOverMap.put(goodsId, true);
+            return "stock < 0";
+        }
+
+        // 订单检查 redis检查
         SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
         if (order != null) {
-            model.addAttribute("errmsg", CodeMessage.REPEATE_MIAOSHA.getMsg());
+            log.info("userId: {} order:{}", userId, order.getOrderId());
+            return "order is not null";
         }
 
-        seckillService.seckill(user, goods);
-        long result = seckillService.getSeckillResult(user.getId(), goodsId);
+        // 秒杀任务队列
+        SeckillMessage seckillMessage = new SeckillMessage();
+        seckillMessage.setUser(user);
+        seckillMessage.setGoodId(goodsId);
+        // 加入队列
+        sender.sendSeckillMessage(seckillMessage);
 
-//        log.info("秒杀用户:{}秒杀商品:{}结果:{}", user.getId(), goodsId, result);
         return "seckill ok";
     }
 
 
     /**
      * 验证码
+     *
      * @param user
      * @param goodsId
      * @param verifyCode
@@ -165,6 +164,7 @@ public class SeckillController implements InitializingBean {
 
     /**
      * 验证码校验
+     *
      * @param response
      * @param user
      * @param goodsId
@@ -189,5 +189,17 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    @Override
+    public void afterPropertiesSet() {
+        List<GoodsVO> goodsList = goodsService.listGoodsVO();
+        if (goodsList == null) {
+            return;
+        }
+        for (GoodsVO goods : goodsList) {
+            //商品库存加载到redis中
+            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
+            seckillOverMap.put(goods.getId(), false);
+        }
+    }
 
 }
