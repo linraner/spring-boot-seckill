@@ -1,8 +1,8 @@
 package com.lin.seckill.service;
 
 
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.LoginVO;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.LoginVO;
 
 import javax.servlet.http.HttpServletResponse;
 

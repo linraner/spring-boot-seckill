@@ -1,6 +1,6 @@
 package com.lin.seckill.rabbitmq;
 
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,6 @@
 package com.lin.seckill.service;
 
-import com.lin.seckill.pojo.vo.GoodsVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lin.seckill.vo.GoodsVO;
 
 import java.util.List;
 

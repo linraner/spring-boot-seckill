@@ -3,19 +3,18 @@ package com.lin.seckill.web;
 import com.lin.seckill.common.access.AccessLimit;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.SeckillOrder;
+import com.lin.seckill.domain.User;
 import com.lin.seckill.rabbitmq.MQSender;
 import com.lin.seckill.rabbitmq.SeckillMessage;
-import com.lin.seckill.redis.GoodsKey;
-import com.lin.seckill.redis.OrderKey;
-import com.lin.seckill.redis.RedisService;
-import com.lin.seckill.redis.SeckillKey;
+import com.lin.seckill.redis.*;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.ISeckillService;
+import com.lin.seckill.service.IUserService;
+import com.lin.seckill.vo.GoodsVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +29,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/miaosha")
-public class SeckillController {
+public class SeckillController implements InitializingBean {
 
     @Autowired
     private RedisService redisService;
@@ -47,9 +46,10 @@ public class SeckillController {
     @Autowired
     private MQSender sender;
 
-    /**
-     * 初始化接口
-     */
+    @Autowired
+    private IUserService userService;
+
+    @Override
     public void afterPropertiesSet() {
         List<GoodsVO> goodsList = goodsService.listGoodsVO();
         if (goodsList == null) {
@@ -103,10 +103,23 @@ public class SeckillController {
         return Result.success(0);
     }
 
-//    @PostMapping("/do_miaosha")
-    public String list(Model model, User user, @RequestParam("goodsId") long goodsId) {
-        log.info("秒杀界面用户信息: {} 商品ID: {}", user.toString(), goodsId);
+    /**
+     * 用于测试的 秒杀接口
+     */
+    @PostMapping("/do_miaosha")
+    @ResponseBody
+    public String list(Model model, @RequestParam("token") String token, @RequestParam("goodsId") long goodsId,
+                       @RequestParam("userId") long userId, HttpServletResponse response) {
+        User user = redisService.get(UserKey.token, token, User.class);
+        if (user == null) {
+            log.info("用户为空");
+            user = userService.getById(userId);
+//            userService.login(response, );
+        }
+
+        log.info("秒杀接口：正在秒杀--用户ID: {} 商品ID: {}", user.getId(), goodsId);
         if (null == user) {
+//            log.info("y");
             return "login";
         }
         model.addAttribute("user", user);
@@ -114,7 +127,7 @@ public class SeckillController {
         int stock = goods.getGoodsStock();
         if (stock <= 0) {
             model.addAttribute("errmsg", CodeMessage.MIAO_SHA_OVER.getMsg());
-            return "miaosha_fail";
+            return "seckill fail";
         }
         SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
         if (order != null) {
@@ -123,11 +136,19 @@ public class SeckillController {
 
         seckillService.seckill(user, goods);
         long result = seckillService.getSeckillResult(user.getId(), goodsId);
+
 //        log.info("秒杀用户:{}秒杀商品:{}结果:{}", user.getId(), goodsId, result);
-        return "redirect:/goods_list";
+        return "seckill ok";
     }
 
 
+    /**
+     * 验证码
+     * @param user
+     * @param goodsId
+     * @param verifyCode
+     * @return
+     */
     @AccessLimit(seconds = 5, maxCount = 5)//实现了接口防刷的功能
     @GetMapping("/path")
     public Result<String> getMiaoshaPath(User user, @RequestParam("goodsId") long goodsId, @RequestParam(value = "verifyCode", defaultValue = "0") int verifyCode) {
@@ -142,6 +163,13 @@ public class SeckillController {
         return Result.success(path);
     }
 
+    /**
+     * 验证码校验
+     * @param response
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @GetMapping("/verifyCode")
     public Result<String> getMiaoshaVerifyCod(HttpServletResponse response, User user, @RequestParam("goodsId") long goodsId) {
         if (user == null) {

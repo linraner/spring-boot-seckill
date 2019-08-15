@@ -1,6 +1,6 @@
 package com.lin.seckill.common.access;
 
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 
 public class UserContext {
     private static ThreadLocal<User> userHolder = new ThreadLocal<>();

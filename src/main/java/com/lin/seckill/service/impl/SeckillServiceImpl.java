@@ -2,9 +2,9 @@ package com.lin.seckill.service.impl;
 
 import com.lin.seckill.common.util.MD5Util;
 import com.lin.seckill.common.util.UUIDUtil;
-import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.SeckillOrder;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.redis.SeckillKey;
 import com.lin.seckill.service.ISeckillService;

@@ -1,9 +1,9 @@
 package com.lin.seckill.web;
 
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsDetailVo;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsDetailVO;
+import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.GoodsKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
@@ -36,10 +36,20 @@ public class GoodsController {
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 商品列表
+     * @param request
+     * @param response
+     * @param model
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "/to_list", produces = "text/html")
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
-        log.info("商品列表页 用户信息:{}", user.toString());
+        if (user != null) {
+            log.info("商品列表页 用户ID:{} 用户名字：{}", user.getId(), user.getNickname());
+        }
         model.addAttribute("user", user);
         List<GoodsVO> goodsList = goodsService.listGoodsVO();
         model.addAttribute("goodsList", goodsList);
@@ -52,7 +62,16 @@ public class GoodsController {
         return html;
     }
 
-    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
+    /**
+     * 开放无验证码秒杀页面
+     * @param request
+     * @param response
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/api2/{goodsId}", produces = "text/html")
     @ResponseBody
     public String detail2(HttpServletRequest request, HttpServletResponse response, Model model, User user, @PathVariable("goodsId") long goodsId) {
         model.addAttribute("user", user);
@@ -65,7 +84,7 @@ public class GoodsController {
         //手动渲染
         GoodsVO goods = goodsService.getGoodsVoByGoodsId(goodsId);
         model.addAttribute("goods", goods);
-        log.info("商品信息: {}", goods.toString());
+        log.info("商品信息: 商品ID：{} 商品库存：{}", goods.getId(), goods.getStockCount());
 
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();
@@ -95,9 +114,15 @@ public class GoodsController {
     }
 
 
+    /**
+     * 返回值JSON 商品信息接口
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(User user, @PathVariable("goodsId") long goodsId) {
+    public Result<GoodsDetailVO> detail(User user, @PathVariable("goodsId") long goodsId) {
         GoodsVO goods = goodsService.getGoodsVoByGoodsId(goodsId);
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();
@@ -114,7 +139,7 @@ public class GoodsController {
             miaoshaStatus = 1;
             remainSeconds = 0;
         }
-        GoodsDetailVo vo = new GoodsDetailVo();
+        GoodsDetailVO vo = new GoodsDetailVO();
         vo.setGoods(goods);
         vo.setUser(user);
         vo.setRemainSeconds(remainSeconds);

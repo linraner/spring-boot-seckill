@@ -1,7 +1,7 @@
 package com.lin.seckill.web;
 
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.pojo.vo.LoginVO;
+import com.lin.seckill.vo.LoginVO;
 import com.lin.seckill.service.IUserService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class LoginController {
     @ResponseBody
     public Result<String> doLogin(HttpServletResponse response, @Valid LoginVO loginVO) {
         String token = userService.login(response, loginVO);
-        log.info("用户登录页面 用户缓存的token: {}", token);
+        log.info("用户登录接口： 用户缓存的token: {}", token);
         return Result.success(token);
     }
 }

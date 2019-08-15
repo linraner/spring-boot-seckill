@@ -1,10 +1,10 @@
 package com.lin.seckill.service.impl;
 
 import com.lin.seckill.dao.OrderDAO;
-import com.lin.seckill.model.OrderInformation;
-import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.OrderInformation;
+import com.lin.seckill.domain.SeckillOrder;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IOrderService;
@@ -45,6 +45,8 @@ public class OrderServiceImpl implements IOrderService {
         orderInformation.setStatus(0);
         orderInformation.setUserId(user.getId());
         orderDAO.insert(orderInformation);
+
+
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setGoodsId(goods.getId());
         seckillOrder.setOrderId(orderInformation.getId());

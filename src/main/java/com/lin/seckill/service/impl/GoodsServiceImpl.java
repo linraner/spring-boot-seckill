@@ -1,8 +1,8 @@
 package com.lin.seckill.service.impl;
 
 import com.lin.seckill.dao.GoodsDAO;
-import com.lin.seckill.model.SeckillGoods;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.SeckillGoods;
+import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

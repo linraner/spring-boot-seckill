@@ -1,7 +1,7 @@
 package com.lin.seckill.common.config;
 
 import com.lin.seckill.common.access.UserContext;
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.support.WebDataBinderFactory;

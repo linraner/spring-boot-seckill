@@ -1,6 +1,6 @@
-package com.lin.seckill.pojo.vo;
+package com.lin.seckill.vo;
 
-import com.lin.seckill.model.Goods;
+import com.lin.seckill.domain.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

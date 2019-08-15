@@ -2,14 +2,14 @@ package com.lin.seckill.web;
 
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.model.OrderInformation;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
-import com.lin.seckill.pojo.vo.OrderDetailVO;
+import com.lin.seckill.domain.OrderInformation;
+import com.lin.seckill.domain.User;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.IUserService;
+import com.lin.seckill.vo.GoodsVO;
+import com.lin.seckill.vo.OrderDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

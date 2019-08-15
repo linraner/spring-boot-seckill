@@ -1,9 +1,9 @@
 package com.lin.seckill.service;
 
-import com.lin.seckill.model.OrderInformation;
-import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.OrderInformation;
+import com.lin.seckill.domain.SeckillOrder;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsVO;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface IOrderService {

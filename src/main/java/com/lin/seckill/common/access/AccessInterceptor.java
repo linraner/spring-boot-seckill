@@ -3,7 +3,7 @@ package com.lin.seckill.common.access;
 import com.alibaba.fastjson.JSON;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.result.Result;
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 import com.lin.seckill.redis.AccessKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IUserService;

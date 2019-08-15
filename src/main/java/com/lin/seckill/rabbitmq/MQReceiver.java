@@ -1,8 +1,8 @@
 package com.lin.seckill.rabbitmq;
 
-import com.lin.seckill.model.SeckillOrder;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.SeckillOrder;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;

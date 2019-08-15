@@ -12,6 +12,4 @@
 * 商品详情页静态化
 
 
-## todo
-* SpringBoot Session
-* 压力测试
+

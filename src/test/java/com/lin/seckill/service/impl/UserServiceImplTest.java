@@ -4,8 +4,8 @@ import com.lin.seckill.common.execption.GlobalException;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.util.MD5Util;
 import com.lin.seckill.common.util.UUIDUtil;
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.LoginVO;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.LoginVO;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.redis.UserKey;
 import com.lin.seckill.service.IUserService;
@@ -14,11 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

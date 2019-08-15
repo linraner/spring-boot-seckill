@@ -1,4 +1,4 @@
-package com.lin.seckill.model;
+package com.lin.seckill.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

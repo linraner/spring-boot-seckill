@@ -1,4 +1,4 @@
-package com.lin.seckill.pojo.vo;
+package com.lin.seckill.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.lin.seckill.dao;
 
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

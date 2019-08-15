@@ -7,16 +7,13 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.lin.seckill.model.User;
+import com.lin.seckill.domain.User;
 
 /**
  * 用户构造用户 生成token
@@ -104,6 +101,6 @@ public class UserUtil {
 	}
 	
 	public static void main(String[] args)throws Exception {
-		createUser(100000);
+		createUser(10000);
 	}
 }

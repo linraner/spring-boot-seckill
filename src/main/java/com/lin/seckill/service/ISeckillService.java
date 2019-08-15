@@ -1,7 +1,7 @@
 package com.lin.seckill.service;
 
-import com.lin.seckill.model.User;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.User;
+import com.lin.seckill.vo.GoodsVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.image.BufferedImage;
@@ -10,7 +10,7 @@ import java.util.List;
 public interface ISeckillService {
 
     /**
-     * 减库存 下订单 写入秒杀订单
+     * 秒杀 减库存 下订单 写入秒杀订单
      *
      * @param user
      * @param goods

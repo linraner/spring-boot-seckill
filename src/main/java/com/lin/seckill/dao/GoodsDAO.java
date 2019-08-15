@@ -1,12 +1,11 @@
 package com.lin.seckill.dao;
 
-import com.lin.seckill.model.SeckillGoods;
-import com.lin.seckill.pojo.vo.GoodsVO;
+import com.lin.seckill.domain.SeckillGoods;
+import com.lin.seckill.vo.GoodsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
