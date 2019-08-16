@@ -59,6 +59,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public void deleteOrders() {
+
         orderDAO.deleteOrders();
         orderDAO.deleteMiaoshaOrders();
     }

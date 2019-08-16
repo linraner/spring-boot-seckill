@@ -38,7 +38,7 @@ public class GoodsServiceImpl implements IGoodsService {
         for (GoodsVO goods : goodsList) {
             SeckillGoods g = new SeckillGoods();
             g.setGoodsId(goods.getId());
-            g.setStockCount(goods.getStockCount());
+            g.setStockCount(500);
             goodsDao.resetStock(g);
         }
     }

@@ -46,21 +46,41 @@ public class SeckillController implements InitializingBean {
     @Autowired
     private IUserService userService;
 
+    /**
+     * 重置秒杀后台缓存、数据库
+     *
+     * @return
+     */
     @GetMapping("/reset")
+    @ResponseBody
     public Result<Boolean> reset() {
         List<GoodsVO> goodsList = goodsService.listGoodsVO();
         for (GoodsVO goods : goodsList) {
             goods.setStockCount(10);
-            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), 10);
+            redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), 500);
         }
+
         redisService.delete(OrderKey.getSeckillOrderByUidGid);
         redisService.delete(SeckillKey.isGoodOver);
+
+        // 库存恢复为500
         seckillService.reset(goodsList);
         return Result.success(true);
     }
 
+    /**
+     * 验证码秒杀接口
+     * @param model
+     * @param user
+     * @param goodsId
+     * @param path
+     * @return
+     */
     @PostMapping("/{path}/do_miaosha")
+    @ResponseBody
     public Result<Integer> seckill(Model model, User user, @RequestParam("goodsId") long goodsId, @PathVariable("path") String path) {
+
+
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMessage.SESSION_ERROR);
@@ -86,11 +106,11 @@ public class SeckillController implements InitializingBean {
         seckillMessage.setGoodId(goodsId);
         // 加入队列
         sender.sendSeckillMessage(seckillMessage);
-        return Result.success(0);
+        return Result.success(200);
     }
 
     /**
-     * 用于测试的 秒杀接口
+     * 压力测试开放的秒杀接口
      */
     @PostMapping("/do_miaosha")
     @ResponseBody
@@ -103,7 +123,7 @@ public class SeckillController implements InitializingBean {
             user = userService.getById(userId);
         }
 
-        log.info("秒杀接口：正在秒杀--用户ID: {} 商品ID: {}", user.getId(), goodsId);
+        log.info("压力测试 秒杀接口：正在秒杀--用户ID: {} 商品ID: {}", user.getId(), goodsId);
         // 用户检查
         if (user == null) {
             return "user is null";
@@ -141,7 +161,7 @@ public class SeckillController implements InitializingBean {
 
 
     /**
-     * 验证码
+     * 验证码校验
      *
      * @param user
      * @param goodsId
@@ -150,11 +170,13 @@ public class SeckillController implements InitializingBean {
      */
     @AccessLimit(seconds = 5, maxCount = 5)//实现了接口防刷的功能
     @GetMapping("/path")
+    @ResponseBody
     public Result<String> getMiaoshaPath(User user, @RequestParam("goodsId") long goodsId, @RequestParam(value = "verifyCode", defaultValue = "0") int verifyCode) {
         if (user == null) {
             return Result.error(CodeMessage.SESSION_ERROR);
         }
         boolean check = seckillService.checkVerifyCode(user, goodsId, verifyCode);
+        int a = 0;
         if (!check) {
             return Result.error(CodeMessage.REQUEST_ILLEGAL);
         }
@@ -163,7 +185,7 @@ public class SeckillController implements InitializingBean {
     }
 
     /**
-     * 验证码校验
+     * 验证码
      *
      * @param response
      * @param user
@@ -171,6 +193,7 @@ public class SeckillController implements InitializingBean {
      * @return
      */
     @GetMapping("/verifyCode")
+    @ResponseBody
     public Result<String> getMiaoshaVerifyCod(HttpServletResponse response, User user, @RequestParam("goodsId") long goodsId) {
         if (user == null) {
             return Result.error(CodeMessage.SESSION_ERROR);

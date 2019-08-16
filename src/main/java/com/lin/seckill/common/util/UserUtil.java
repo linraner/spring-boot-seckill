@@ -54,7 +54,7 @@ public class UserUtil {
 //		conn.close();
 //		System.out.println("insert to db");
 		//登录，生成token
-		String urlString = "http://localhost:8080/do_login";
+		String urlString = "http://59.110.225.203:8080/do_login";
 		File file = new File("D:/tokens.txt");
 		if(file.exists()) {
 			file.delete();

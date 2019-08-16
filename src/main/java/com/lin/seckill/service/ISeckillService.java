@@ -82,5 +82,6 @@ public interface ISeckillService {
      * 初始化
      * @param goodsVOList
      */
+    @Transactional
     void reset(List<GoodsVO> goodsVOList);
 }

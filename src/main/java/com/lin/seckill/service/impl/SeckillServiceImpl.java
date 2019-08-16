@@ -106,10 +106,18 @@ public class SeckillServiceImpl implements ISeckillService {
             return null;
         }
         String str = MD5Util.md5(UUIDUtil.uuid() + "123456");
-        redisService.set(SeckillKey.getSeckillPath, "" + user.getId() + "_" + goodsId, user);
+        redisService.set(SeckillKey.getSeckillPath, "" + user.getId() + "_" + goodsId, str);
         return str;
     }
 
+    /**
+     * 接口路径检查
+     *
+     * @param user
+     * @param goodsId
+     * @param path
+     * @return
+     */
     @Override
     public boolean checkPath(User user, long goodsId, String path) {
         if (null == user || null == path) {
@@ -161,6 +169,7 @@ public class SeckillServiceImpl implements ISeckillService {
 
     @Override
     public void reset(List<GoodsVO> goodsVOList) {
+        log.info("reset mysql");
         goodsService.resetStock(goodsVOList);
         orderService.deleteOrders();
     }
