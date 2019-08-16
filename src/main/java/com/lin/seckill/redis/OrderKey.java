@@ -6,4 +6,6 @@ public class OrderKey extends BasePrefix {
     }
 
     public static OrderKey getSeckillOrderByUidGid = new OrderKey("moug");
+
+
 }

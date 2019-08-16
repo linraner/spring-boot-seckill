@@ -18,7 +18,10 @@ public class OrderInformation {
     private Integer goodsCount;
     private Double goodsPrice;
     private Integer orderChannel;
+
     private Integer status;
+
     private Date createDate;
+
     private Date payDate;
 }

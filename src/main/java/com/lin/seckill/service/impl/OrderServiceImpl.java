@@ -51,6 +51,7 @@ public class OrderServiceImpl implements IOrderService {
         seckillOrder.setGoodsId(goods.getId());
         seckillOrder.setOrderId(orderInformation.getId());
         seckillOrder.setUserId(user.getId());
+
         orderDAO.insertMiaoshaOrder(seckillOrder);
 
         redisService.set(OrderKey.getSeckillOrderByUidGid, "" + user.getId() + "_" + goods.getId(), seckillOrder);
