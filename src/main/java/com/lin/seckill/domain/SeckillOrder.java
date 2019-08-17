@@ -1,5 +1,6 @@
 package com.lin.seckill.domain;
 
+import com.lin.seckill.redis.UserKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,5 @@ public class SeckillOrder {
     private Long orderId;
     private Long goodsId;
 
-//    private Date createDate;
-//    private Date payDate;
-//    private Integer status;
+    private Integer status; // 0 失效 1 支付
 }

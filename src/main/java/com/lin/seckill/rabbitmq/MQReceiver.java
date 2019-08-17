@@ -2,6 +2,7 @@ package com.lin.seckill.rabbitmq;
 
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
+import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
@@ -29,6 +30,7 @@ public class MQReceiver {
 
     /**
      * 直接消费队列任务
+     *
      * @param message
      */
     @RabbitListener(queues = MQConfig.SECKILL_QUEUE)
@@ -52,6 +54,39 @@ public class MQReceiver {
         seckillService.seckill(user, goods);
     }
 
+    /**
+     *  处理过期key
+     * @param message
+     */
+    @RabbitListener(queues = MQConfig.ORDER_EXPIRE_QUEUE)
+    public void receiveOrderExpireMessage(String message) {
+        log.info("order receive:" + message);
+        OrderExpireMessage msg = RedisService.stringToBean(message, OrderExpireMessage.class);
+        String expireKey = msg.getExpireKey();
+        // 对失效订单的处理 以下这个方法并不好
+        if (expireKey.startsWith(OrderKey.getSeckillOrderByUidGidPer.getPrefix())) {
+            expireKey = expireKey.substring(OrderKey.getSeckillOrderByUidGidPer.getPrefix().length(), expireKey.length());
+            int split = expireKey.indexOf("_");
+
+            Long userId = Long.valueOf(expireKey.substring(0, split));
+            Long goodsId = Long.valueOf(expireKey.substring(split + 1, expireKey.length()));
+
+            // 回滚库存
+            orderService.restore(goodsId);
+
+            // todo: mysql刷新未支付订单
+
+
+//            String ss = "moug13000000365_1";
+//            System.out.println(ss.startsWith("moug"));
+//            ss = ss.substring("moug".length(), ss.length());
+//            System.out.println(ss);
+//            int split = ss.indexOf("_");
+//            System.out.println(ss.substring(0,split));
+//            System.out.println(ss.substring(split+1, ss.length()));
+        }
+
+    }
 
 
     @RabbitListener(queues = MQConfig.QUEUE)

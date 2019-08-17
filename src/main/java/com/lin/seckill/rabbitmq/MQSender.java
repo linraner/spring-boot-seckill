@@ -18,6 +18,12 @@ public class MQSender {
         amqpTemplate.convertAndSend(MQConfig.SECKILL_QUEUE, msg);
     }
 
+    public void sendOrderExpireMessage(OrderExpireMessage message) {
+        String msg = RedisService.beanToString(message);
+        log.info("orderExpireQueue send message:" + msg);
+        amqpTemplate.convertAndSend(MQConfig.ORDER_EXPIRE_QUEUE, msg);
+    }
+
     /**
      * test
      * @param message
@@ -27,6 +33,8 @@ public class MQSender {
         log.info("sender message:{}", msg);
         amqpTemplate.convertAndSend(MQConfig.QUEUE, msg);
     }
+
+
 
 
 }

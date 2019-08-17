@@ -3,6 +3,7 @@ package com.lin.seckill.web;
 import com.lin.seckill.common.result.CodeMessage;
 import com.lin.seckill.common.result.Result;
 import com.lin.seckill.domain.OrderInformation;
+import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -51,5 +54,18 @@ public class OrderController {
         orderDetailVO.setGoodsVO(goodsVO);
         orderDetailVO.setOrder(order);
         return Result.success(orderDetailVO);
+    }
+
+    @RequestMapping("/payAll")
+    public String payOrder(User user) {
+        if (user == null) {
+            return "redirect:/login";
+        }
+        // todo: 获取seckill future<>
+//        List<SeckillOrder> seckillOrders =  redisService.get()
+
+
+
+        return "pay all ok";
     }
 }

@@ -4,6 +4,8 @@ import com.lin.seckill.domain.OrderInformation;
 import com.lin.seckill.domain.SeckillOrder;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
+
 @Mapper
 public interface OrderDAO {
 
@@ -11,7 +13,7 @@ public interface OrderDAO {
     @SelectKey(keyColumn = "id", keyProperty = "id", resultType = long.class, before = false, statement = "select last_insert_id()")
     void insert(OrderInformation orderInfo);
 
-    @Insert("insert into miaosha_order (user_id, goods_id, order_id)values(#{userId}, #{goodsId}, #{orderId})")
+    @Insert("insert into miaosha_order (user_id, goods_id, order_id, status)values(#{userId}, #{goodsId}, #{orderId}, #{status})")
     void insertMiaoshaOrder(SeckillOrder miaoshaOrder);
 
     @Select("select * from order_info where id = #{orderId}")
@@ -23,5 +25,9 @@ public interface OrderDAO {
     @Delete("delete from miaosha_order")
     void deleteMiaoshaOrders();
 
+    @Update(("update order_info set status=1, pay_date=#{payDate} where id = #{orderId}"))
+    void updatePayOrderInformation(@Param("orderId") long orderId, @Param("payDate")Date payDate);
 
+
+    void deleteSeckillOrderById();
 }

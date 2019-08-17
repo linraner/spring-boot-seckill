@@ -36,6 +36,15 @@ public interface IOrderService {
 
 
     /**
+     * 支付
+     */
+    @Transactional
+    void updatePayOrderInformation(SeckillOrder seckillOrder);
+
+
+    void restore(long goodsId);
+
+    /**
      * 内部调用 删除订单接口
      */
     void deleteOrders();

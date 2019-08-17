@@ -10,12 +10,14 @@ public class MQConfig {
 
     public static final String SECKILL_QUEUE = "seckill.queue";
     public static final String QUEUE = "queue";
-    public static final String TOPIC_QUEUE1 = "topic.queue1";
-    public static final String TOPIC_QUEUE2 = "topic.queue2";
-    public static final String HEADER_QUEUE = "header.queue";
-    public static final String TOPIC_EXCHANGE = "topicExchage";
-    public static final String FANOUT_EXCHANGE = "fanoutxchage";
-    public static final String HEADERS_EXCHANGE = "headersExchage";
+    public static final String ORDER_EXPIRE_QUEUE = "orderExpire.queue";
+//    public static final String TOPIC_QUEUE1 = "topic.queue1";
+//    public static final String TOPIC_QUEUE2 = "topic.queue2";
+//    public static final String HEADER_QUEUE = "header.queue";
+//    public static final String TOPIC_EXCHANGE = "topicExchage";
+//    public static final String FANOUT_EXCHANGE = "fanoutxchage";
+//    public static final String HEADERS_EXCHANGE = "headersExchage";
+
 
     @Bean
     public Queue queue() {
@@ -23,10 +25,15 @@ public class MQConfig {
     }
 
     @Bean
-    public Queue mqqueue() {
+    public Queue seckillQueue() {
         return new Queue(SECKILL_QUEUE, true);
     }
 
+
+    @Bean
+    public Queue orderExpireQueue() {
+        return new Queue(ORDER_EXPIRE_QUEUE, true);
+    }
 
     /**
      * Topic模式 交换机Exchange
