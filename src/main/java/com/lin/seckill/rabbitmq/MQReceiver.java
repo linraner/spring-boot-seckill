@@ -3,15 +3,20 @@ package com.lin.seckill.rabbitmq;
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
 import com.lin.seckill.redis.OrderKey;
-import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
 import com.lin.seckill.service.ISeckillService;
+import com.lin.seckill.vo.GoodsVO;
+import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -36,7 +41,7 @@ public class MQReceiver {
     @RabbitListener(queues = MQConfig.SECKILL_QUEUE)
     public void receive(String message) {
         log.info("receive message:" + message);
-        SeckillMessage mm = RedisService.stringToBean(message, SeckillMessage.class);
+        SeckillOrderMessage mm = RedisService.stringToBean(message, SeckillOrderMessage.class);
         User user = mm.getUser();
         long goodsId = mm.getGoodId();
 
@@ -55,7 +60,8 @@ public class MQReceiver {
     }
 
     /**
-     *  处理过期key
+     * 处理过期key
+     *
      * @param message
      */
     @RabbitListener(queues = MQConfig.ORDER_EXPIRE_QUEUE)
@@ -65,27 +71,30 @@ public class MQReceiver {
         String expireKey = msg.getExpireKey();
         // 对失效订单的处理 以下这个方法并不好
         if (expireKey.startsWith(OrderKey.getSeckillOrderByUidGidPer.getPrefix())) {
-            expireKey = expireKey.substring(OrderKey.getSeckillOrderByUidGidPer.getPrefix().length(), expireKey.length());
+            expireKey = expireKey.substring(OrderKey.getSeckillOrderByUidGidPer.getPrefix().length());
             int split = expireKey.indexOf("_");
 
             Long userId = Long.valueOf(expireKey.substring(0, split));
-            Long goodsId = Long.valueOf(expireKey.substring(split + 1, expireKey.length()));
+            Long goodsId = Long.valueOf(expireKey.substring(split + 1));
 
             // 回滚库存
             orderService.restore(goodsId);
 
             // todo: mysql刷新未支付订单
 
-
-//            String ss = "moug13000000365_1";
-//            System.out.println(ss.startsWith("moug"));
-//            ss = ss.substring("moug".length(), ss.length());
-//            System.out.println(ss);
-//            int split = ss.indexOf("_");
-//            System.out.println(ss.substring(0,split));
-//            System.out.println(ss.substring(split+1, ss.length()));
         }
 
+    }
+
+    @RabbitListener(queues = {MQConfig.REGISTER_QUEUE_NAME})
+    public void listenerDelayQueue(SeckillOrder orderMessage, Message message, Channel channel) {
+        log.info("[listenerDelayQueue 监听的消息] - [消费时间] - [{}] - [{}]", LocalDateTime.now(), seckillService.toString());
+        try {
+            // TODO 通知 MQ 消息已被成功消费,可以ACK了
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        } catch (IOException e) {
+            // TODO 如果报错了,那么我们可以进行容错处理,比如转移当前消息进入其它队列
+        }
     }
 
 

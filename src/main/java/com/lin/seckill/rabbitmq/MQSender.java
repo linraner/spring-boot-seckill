@@ -12,7 +12,7 @@ public class MQSender {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    public void sendSeckillMessage(SeckillMessage mm) {
+    public void sendSeckillMessage(SeckillOrderMessage mm) {
         String msg = RedisService.beanToString(mm);
         log.info("send message:" + msg);
         amqpTemplate.convertAndSend(MQConfig.SECKILL_QUEUE, msg);

@@ -3,7 +3,6 @@ package com.lin.seckill.timeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -15,7 +14,7 @@ import javax.annotation.Resource;
 public class SubscriberRedisKeyTimeout implements CommandLineRunner {
 
     @Resource
-    private OrderKeyExpiredListener orderKeyExpiredListener;
+    private KeyExpiredListener keyExpiredListener;
 
     @Autowired
     private JedisPool jedisPool;
@@ -28,12 +27,12 @@ public class SubscriberRedisKeyTimeout implements CommandLineRunner {
             @Override
             public void run() {
                 try {
-                    log.info("orderKeyExpiredListener start");
-                    jedis.subscribe(orderKeyExpiredListener, "__keyevent@0__:expired");
+                    log.info("KeyExpiredListener start");
+                    jedis.subscribe(keyExpiredListener, "__keyevent@0__:expired");
 
                     log.info("orderKeyExpiredListener over");
                 } catch (Exception e) {
-                    log.info("orderKeyExpiredListener " + e.getMessage());
+                    log.info("KeyExpiredListener " + e.getMessage());
                 }
             }
         }).start();

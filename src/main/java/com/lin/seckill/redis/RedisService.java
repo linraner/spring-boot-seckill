@@ -67,26 +67,6 @@ public class RedisService {
         }
     }
 
-    /**
-     * todo: 获取前缀对象List
-     */
-//    public List<T>  getList(KeyPrefix prefix, Class<T> clazz) {
-//        Jedis jedis = null;
-//        try {
-//            jedis = jedisPool.getResource();
-//            List<String> strList = jedis.hmget(prefix.getPrefix() + "*");
-//            List<T> list = new ArrayList<T>();
-//            for (String ss : strList) {
-//                list.add(stringToBean(ss, clazz));
-//            }
-//            return list;
-////            return stringToBean(str, clazz);
-//            return null;
-//        } finally {
-//            returnToPool(jedis);
-//        }
-//    }
-
 
     /**
      * 设置对象

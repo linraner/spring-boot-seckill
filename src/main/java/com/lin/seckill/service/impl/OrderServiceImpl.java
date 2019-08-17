@@ -4,24 +4,37 @@ import com.lin.seckill.dao.OrderDAO;
 import com.lin.seckill.domain.OrderInformation;
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
+import com.lin.seckill.rabbitmq.MQConfig;
 import com.lin.seckill.redis.GoodsKey;
-import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IOrderService;
+import com.lin.seckill.vo.GoodsVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.AbstractJavaTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
+    private final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
     private OrderDAO orderDAO;
 
     @Autowired
     private RedisService redisService;
+
+    public OrderServiceImpl(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @Override
     public SeckillOrder getSeckillOrderByUserIdGoodsId(long userId, long goodId) {
@@ -59,12 +72,15 @@ public class OrderServiceImpl implements IOrderService {
         seckillOrder.setStatus(0);
         orderDAO.insertMiaoshaOrder(seckillOrder);
         redisService.set(OrderKey.getSeckillOrderByUidGid, "" + user.getId() + "_" + goods.getId(), seckillOrder);
+        // 延迟队列
+        delaySeckillOrderMessage(seckillOrder);
 
         return orderInformation;
     }
 
     /**
      * 支付订单 status = 1
+     *
      * @param seckillOrder
      */
     @Override
@@ -89,11 +105,27 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
-
     @Override
     public void deleteOrders() {
 
         orderDAO.deleteOrders();
         orderDAO.deleteMiaoshaOrders();
+    }
+
+    @Override
+    public List<SeckillOrder> getSeckillOrderList() {
+        return orderDAO.getSeckillOrderList();
+    }
+
+    private void delaySeckillOrderMessage(SeckillOrder order) {
+        // 添加延时队列
+        this.rabbitTemplate.convertAndSend(MQConfig.ORDER_DELAY_QUEUE, MQConfig.DELAY_ROUTING_KEY, order, message -> {
+            // 第一句是可要可不要,根据自己需要自行处理
+            message.getMessageProperties().setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME, SeckillOrder.class.getName());
+            // 如果配置了 params.put("x-message-ttl", 5 * 1000); 那么这一句也可以省略,具体根据业务需要是声明 Queue 的时候就指定好延迟时间还是在发送自己控制时间
+            message.getMessageProperties().setExpiration(5 * 1000 + "");
+            return message;
+        });
+        log.info("[发送时间] - [{}]", LocalDateTime.now());
     }
 }

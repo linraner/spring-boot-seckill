@@ -6,6 +6,8 @@ import com.lin.seckill.domain.User;
 import com.lin.seckill.vo.GoodsVO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface IOrderService {
 
     /**
@@ -48,4 +50,9 @@ public interface IOrderService {
      * 内部调用 删除订单接口
      */
     void deleteOrders();
+
+    /**
+     * 内部调用
+     */
+    List<SeckillOrder> getSeckillOrderList();
 }

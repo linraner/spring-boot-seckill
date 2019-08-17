@@ -5,6 +5,7 @@ import com.lin.seckill.common.result.Result;
 import com.lin.seckill.domain.OrderInformation;
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
+import com.lin.seckill.redis.OrderKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
@@ -13,6 +14,7 @@ import com.lin.seckill.vo.GoodsVO;
 import com.lin.seckill.vo.OrderDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,15 +58,31 @@ public class OrderController {
         return Result.success(orderDetailVO);
     }
 
-    @RequestMapping("/payAll")
+    /**
+     * 测试接口
+     * @param user
+     * @return
+     */
+    @GetMapping("/payAll")
     public String payOrder(User user) {
         if (user == null) {
             return "redirect:/login";
         }
-        // todo: 获取seckill future<>
-//        List<SeckillOrder> seckillOrders =  redisService.get()
+        List<SeckillOrder> seckillOrders = orderService.getSeckillOrderList();
+        for (SeckillOrder seckillOrder : seckillOrders) {
+            Long userId = seckillOrder.getUserId();
+            Long goodsId = seckillOrder.getGoodsId();
+            Long orderId = seckillOrder.getOrderId();
+            int status = seckillOrder.getStatus();
 
+            SeckillOrder tSeckillOrder = redisService.get(OrderKey.getSeckillOrderByUidGid, "" + userId + "_" + goodsId, SeckillOrder.class);
+            if (tSeckillOrder == null) {
+                // 缓存失效
+            } else {
+                orderService.updatePayOrderInformation(seckillOrder);
+            }
 
+        }
 
         return "pay all ok";
     }

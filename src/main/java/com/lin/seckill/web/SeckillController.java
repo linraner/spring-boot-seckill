@@ -6,7 +6,7 @@ import com.lin.seckill.common.result.Result;
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.domain.User;
 import com.lin.seckill.rabbitmq.MQSender;
-import com.lin.seckill.rabbitmq.SeckillMessage;
+import com.lin.seckill.rabbitmq.SeckillOrderMessage;
 import com.lin.seckill.redis.*;
 import com.lin.seckill.service.IGoodsService;
 import com.lin.seckill.service.IOrderService;
@@ -101,11 +101,11 @@ public class SeckillController implements InitializingBean {
             return Result.error(CodeMessage.REPEATE_MIAOSHA);
         }
 
-        SeckillMessage seckillMessage = new SeckillMessage();
-        seckillMessage.setUser(user);
-        seckillMessage.setGoodId(goodsId);
+        SeckillOrderMessage seckillOrderMessage = new SeckillOrderMessage();
+        seckillOrderMessage.setUser(user);
+        seckillOrderMessage.setGoodId(goodsId);
         // 加入队列
-        sender.sendSeckillMessage(seckillMessage);
+        sender.sendSeckillMessage(seckillOrderMessage);
         return Result.success(200);
     }
 
@@ -150,11 +150,11 @@ public class SeckillController implements InitializingBean {
         }
 
         // 秒杀任务队列
-        SeckillMessage seckillMessage = new SeckillMessage();
-        seckillMessage.setUser(user);
-        seckillMessage.setGoodId(goodsId);
+        SeckillOrderMessage seckillOrderMessage = new SeckillOrderMessage();
+        seckillOrderMessage.setUser(user);
+        seckillOrderMessage.setGoodId(goodsId);
         // 加入队列
-        sender.sendSeckillMessage(seckillMessage);
+        sender.sendSeckillMessage(seckillOrderMessage);
 
         return "seckill ok";
     }
