@@ -123,7 +123,8 @@ public class OrderServiceImpl implements IOrderService {
             // 第一句是可要可不要,根据自己需要自行处理
             message.getMessageProperties().setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME, SeckillOrder.class.getName());
             // 如果配置了 params.put("x-message-ttl", 5 * 1000); 那么这一句也可以省略,具体根据业务需要是声明 Queue 的时候就指定好延迟时间还是在发送自己控制时间
-            message.getMessageProperties().setExpiration(5 * 1000 + "");
+            // ttl 单位毫秒
+            message.getMessageProperties().setExpiration(10 * OrderKey.ORDER_EXPIRE * 1000 + "");
             return message;
         });
         log.info("[发送时间] - [{}]", LocalDateTime.now());

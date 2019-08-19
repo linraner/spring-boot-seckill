@@ -79,7 +79,6 @@ public class MQReceiver {
 
             // 回滚库存
             orderService.restore(goodsId);
-
             // todo: mysql刷新未支付订单
 
         }
@@ -90,13 +89,12 @@ public class MQReceiver {
     public void listenerDelayQueue(SeckillOrder orderMessage, Message message, Channel channel) {
         log.info("[listenerDelayQueue 监听的消息] - [消费时间] - [{}] - [{}]", LocalDateTime.now(), seckillService.toString());
         try {
-            // TODO 通知 MQ 消息已被成功消费,可以ACK了
+            // 通知 MQ 消息已被成功消费,可以ACK了
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
-            // TODO 如果报错了,那么我们可以进行容错处理,比如转移当前消息进入其它队列
+            // 如果报错了,那么我们可以进行容错处理,比如转移当前消息进入其它队列
         }
     }
-
 
     @RabbitListener(queues = MQConfig.QUEUE)
     public void receivetest(String message) {
