@@ -212,6 +212,9 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    /**
+     * 单线程的初始化
+     */
     @Override
     public void afterPropertiesSet() {
         List<GoodsVO> goodsList = goodsService.listGoodsVO();
