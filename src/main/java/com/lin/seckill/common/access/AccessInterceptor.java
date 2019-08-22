@@ -30,6 +30,14 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 接口限流
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
@@ -76,9 +84,15 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         outputStream.close();
     }
 
-    //获取用户
+    /**
+     * paramToken 请求参数中的token
+     *
+     * @param request
+     * @param response
+     * @return
+     */
     private User getUser(HttpServletRequest request, HttpServletResponse response) {
-        String paramToken = request.getParameter(UserServiceImpl.COOKI_NAME_TOKEN);
+        String paramToken = request.getParameter(UserServiceImpl.COOKIE_NAME_TOKEN);
         String cookieToken = getCookieValue(request);
         if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
             return null;
@@ -87,13 +101,18 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         return userService.getByToken(response, token);
     }
 
+    /**
+     * 从cookie中拿到token
+     * @param request
+     * @return
+     */
     private String getCookieValue(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length <= 0) {
             return null;
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(UserServiceImpl.COOKI_NAME_TOKEN)) {
+            if (cookie.getName().equals(UserServiceImpl.COOKIE_NAME_TOKEN)) {
                 return cookie.getValue();
             }
         }
