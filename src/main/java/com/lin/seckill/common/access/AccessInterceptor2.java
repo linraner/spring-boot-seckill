@@ -7,22 +7,20 @@ import com.lin.seckill.domain.User;
 import com.lin.seckill.redis.AccessKey;
 import com.lin.seckill.redis.RedisService;
 import com.lin.seckill.service.IUserService;
-import com.lin.seckill.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 
-//@Service
-public class AccessInterceptor extends HandlerInterceptorAdapter {
+@Service
+public class AccessInterceptor2 extends HandlerInterceptorAdapter {
 
     @Autowired
     private IUserService userService;
@@ -30,18 +28,11 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private RedisService redisService;
 
-    /**
-     * 接口限流
-     * @param request
-     * @param response
-     * @param handler
-     * @return
-     * @throws Exception
-     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
-            User user = getUser(request, response);
+            HttpSession session = request.getSession();
+            User user = getUser(session);
             UserContext.setUser(user);
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             //获取注解对象
@@ -84,39 +75,8 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         outputStream.close();
     }
 
-    /**
-     * paramToken 请求参数中的token
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    private User getUser(HttpServletRequest request, HttpServletResponse response) {
-        String paramToken = request.getParameter(UserServiceImpl.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request);
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
-            return null;
-        }
-        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return userService.getByToken(response, token);
-    }
-
-    /**
-     * 从cookie中拿到token
-     * @param request
-     * @return
-     */
-    private String getCookieValue(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null || cookies.length <= 0) {
-            return null;
-        }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(UserServiceImpl.COOKIE_NAME_TOKEN)) {
-                return cookie.getValue();
-            }
-        }
-        return null;
+    private User getUser(HttpSession session) {
+        return RedisService.stringToBean((String) session.getAttribute("user"), User.class);
     }
 
 }

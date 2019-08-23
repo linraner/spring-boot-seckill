@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -43,7 +44,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String login(HttpServletResponse response, LoginVO loginVO) {
+    public String login(HttpServletRequest request, HttpServletResponse response, LoginVO loginVO) {
         if (loginVO == null) {
             throw new GlobalException(CodeMessage.SERVER_ERROR);
         }

@@ -3,14 +3,16 @@ package com.lin.seckill.timeTask;
 import com.lin.seckill.common.result.Result;
 import com.lin.seckill.domain.SeckillOrder;
 import com.lin.seckill.redis.RedisService;
-import com.lin.seckill.redis.SeckillKey;
 import com.lin.seckill.service.IOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 订单未支付5分钟 回退库存
  */
 public class OrderCloseTask {
+    private Logger logger = LoggerFactory.getLogger(OrderCloseTask.class);
 
     @Autowired
     private RedisService redisService;

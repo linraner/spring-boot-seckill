@@ -1,6 +1,6 @@
 package com.lin.seckill.common.config;
 
-import com.lin.seckill.common.access.AccessInterceptor;
+import com.lin.seckill.common.access.AccessInterceptor2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -16,7 +16,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private UserArgumentResolver userArgumentResolver;
 
     @Autowired
-    private AccessInterceptor accessInterceptor;
+    private AccessInterceptor2 accessInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {

@@ -14,7 +14,5 @@ public class UserContext {
     }
 
     private UserContext() {
-
     }
-
 }

@@ -1,5 +1,6 @@
 package com.lin.seckill.web;
 
+import com.lin.seckill.common.enums.LoginEnum;
 import com.lin.seckill.common.result.Result;
 import com.lin.seckill.vo.LoginVO;
 import com.lin.seckill.service.IUserService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -32,11 +34,11 @@ public class LoginController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "loginVO", value = "用户实体类user", required = true, dataType = "LoginVO")
     })
+
     @PostMapping("/do_login")
     @ResponseBody
-    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVO loginVO) {
-        String token = userService.login(response, loginVO);
-        log.info("用户登录接口： 用户缓存的token: {}", token);
-        return Result.success(token);
+    public Result<LoginEnum> doLogin(HttpServletRequest request, HttpServletResponse response, @Valid LoginVO loginVO) {
+        String token = userService.login(request, response, loginVO);
+        return Result.success(LoginEnum.SUCCESS);
     }
 }
